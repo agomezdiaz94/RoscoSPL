@@ -1,158 +1,162 @@
-import React, { useEffect, useState, useRef } from "react";
-import "../styles/Rosco.css"; // o ./Rosco.css si lo tienes en components
+import React, { useState, useEffect, useRef } from "react";
+import "../styles/Rosco.css";
 import preguntasData from "../data/preguntas.json";
-import logo from "../assets/logo.png";
 
-// sonidos desde public/sounds (ruta absoluta para producción)
-const SOUND_CORRECT = "/sounds/correcto.mp3";
-const SOUND_INCORRECT = "/sounds/incorrecto.mp3";
-const SOUND_PASA = "/sounds/pasapalabra.mp3";
+import logo from "../assets/logo.png";     // Logo derecha
+import logo2 from "../assets/logo2.png";   // Logo izquierda
 
 const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
 export default function Rosco() {
-  const [nombre, setNombre] = useState("");
-  const [iniciado, setIniciado] = useState(false);
-
-  // preguntas por letra: vamos a generar un array de 26 elementos (A..Z)
   const [preguntas, setPreguntas] = useState([]);
-  const [indice, setIndice] = useState(0);
+  const [current, setCurrent] = useState(0);
   const [respuesta, setRespuesta] = useState("");
-  const videoRef = useRef(null);
+  const [estadoLetras, setEstadoLetras] = useState({});
+  const [jugador, setJugador] = useState("");
+  const [jugadorListo, setJugadorListo] = useState(false);
+
+  const audioCorrecto = useRef(null);
+  const audioIncorrecto = useRef(null);
+  const audioPasapalabra = useRef(null);
 
   useEffect(() => {
-    // construye preguntas ordenadas A..Z (si tu JSON es array por letra, lo adaptamos)
-    // Aquí asumimos que preguntasData es un array con objetos que tienen "letra","pregunta","respuesta"
-    if (Array.isArray(preguntasData)) {
-      // para cada letra elegimos aleatoriamente una de las preguntas disponibles
-      const arr = letras.map((L) => {
-        const ops = preguntasData.filter((p) => p.letra.toUpperCase() === L);
-        if (ops.length === 0) return { letra: L, pregunta: `No hay pregunta para ${L}`, respuesta: "" };
-        return ops[Math.floor(Math.random() * ops.length)];
-      });
-      setPreguntas(arr);
-    } else {
-      // si tu preguntas.json es un objeto por clave A:{...}, lo convertimos
-      const arr = letras.map((L) => {
-        if (preguntasData[L]) return { letra: L, ...preguntasData[L] };
-        return { letra: L, pregunta: `No hay pregunta para ${L}`, respuesta: "" };
-      });
-      setPreguntas(arr);
-    }
+    setPreguntas(preguntasData);
   }, []);
 
-  useEffect(() => {
-    if (!iniciado) return;
-    // iniciar cámara (opcional)
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices
-        .getUserMedia({ video: true })
-        .then((stream) => {
-          if (videoRef.current) videoRef.current.srcObject = stream;
-        })
-        .catch((err) => {
-          // no bloquear juego si no hay cámara
-          console.warn("No se pudo acceder a la cámara:", err);
-        });
-    }
-  }, [iniciado]);
-
-  const playSound = (url) => {
-    try {
-      const a = new Audio(url);
-      a.play().catch(() => {});
-    } catch (e) {}
-  };
-
-  const handleIniciar = () => {
-    if (!nombre.trim()) { alert("Ingresa tu nombre"); return; }
-    setIniciado(true);
-    setIndice(0);
-  };
-
   const handleResponder = () => {
-    if (!preguntas[indice]) return;
-    const correcta = preguntas[indice].respuesta?.trim().toLowerCase() || "";
-    const dada = respuesta.trim().toLowerCase();
-    if (dada === "") return;
-    if (dada === "pasapalabra") {
-      playSound(SOUND_PASA);
-      // dejar la pregunta para más adelante y sólo avanzar índice
-    } else if (dada === correcta) {
-      playSound(SOUND_CORRECT);
-      // podrías marcar como correcta en un array si quieres
+    const correcta = preguntas[current].respuesta.toLowerCase().trim();
+    const userRes = respuesta.toLowerCase().trim();
+
+    let nuevoEstado = { ...estadoLetras };
+
+    if (userRes === correcta) {
+      nuevoEstado[preguntas[current].letra] = "correcto";
+      audioCorrecto.current.play();
     } else {
-      playSound(SOUND_INCORRECT);
+      nuevoEstado[preguntas[current].letra] = "incorrecto";
+      audioIncorrecto.current.play();
     }
-    setRespuesta("");
-    setIndice((i) => (i + 1) % letras.length);
+
+    setEstadoLetras(nuevoEstado);
+    avanzar();
   };
 
-  const handlePasar = () => {
-    playSound(SOUND_PASA);
-    setIndice((i) => (i + 1) % letras.length);
+  const handlePasapalabra = () => {
+    let nuevoEstado = { ...estadoLetras };
+    nuevoEstado[preguntas[current].letra] = "pasapalabra";
+
+    setEstadoLetras(nuevoEstado);
+    audioPasapalabra.current.play();
+    avanzar();
   };
+
+  const avanzar = () => {
+    setRespuesta("");
+
+    let next = current + 1;
+
+    while (next < preguntas.length && estadoLetras[preguntas[next].letra]) {
+      next++;
+    }
+
+    if (next >= preguntas.length) next = preguntas.findIndex(
+      (p) => !estadoLetras[p.letra]
+    );
+
+    if (next === -1) {
+      alert("¡Juego terminado!");
+      return;
+    }
+
+    setCurrent(next);
+  };
+
+  if (!preguntas.length) return <div>Cargando...</div>;
+
+  if (!jugadorListo) {
+    return (
+      <div className="nombre-container">
+        <h2>Ingrese su nombre</h2>
+        <input
+          type="text"
+          placeholder="Nombre..."
+          value={jugador}
+          onChange={(e) => setJugador(e.target.value)}
+        />
+        <button
+          onClick={() => jugador.trim() && setJugadorListo(true)}
+          className="btn-nombre"
+        >
+          Comenzar
+        </button>
+      </div>
+    );
+  }
 
   return (
-    <div className="rosco-app">
-      <img src={logo} alt="Logo" className="logo-esquina" />
+    <div className="rosco-container">
+      
+      {/* LOGOS ARRIBA */}
+      <div className="logos-container">
+        <img src={logo2} className="logo-izq" alt="Logo izquierdo" />
+        <img src={logo} className="logo-der" alt="Logo derecho" />
+      </div>
 
-      {!iniciado ? (
-        <div className="inicio-panel">
-          <h2>Rosco - Sociedad Punta de Lobos</h2>
-          <input value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder="Tu nombre" />
-          <button onClick={handleIniciar}>Iniciar</button>
-        </div>
-      ) : (
-        <div className="juego-panel">
-          <div className="rosco-wrap">
-            <div className="rosco-circle">
-              {letras.map((L, idx) => {
-                // posición circular simple
-                const angle = (idx / letras.length) * Math.PI * 2;
-                const r = 140; // radio en px, ajustable
-                const x = Math.round(r * Math.cos(angle));
-                const y = Math.round(r * Math.sin(angle));
-                return (
-                  <div
-                    key={L}
-                    className={`rosco-letter ${idx === indice ? "active" : ""}`}
-                    style={{ transform: `translate(${x}px, ${y}px)` }}
-                  >
-                    {L}
-                  </div>
-                );
-              })}
-              {/* cámara circular en el centro */}
-              <div className="camera-center">
-                <video ref={videoRef} autoPlay muted playsInline className="camera-video" />
-              </div>
+      {/* ROSCO */}
+      <div className="rosco">
+        {letras.map((letra, index) => {
+          const angle = (index / letras.length) * 2 * Math.PI;
+          const radius = 180;
+
+          const x = radius * Math.cos(angle);
+          const y = radius * Math.sin(angle);
+
+          const estado = estadoLetras[letra];
+
+          return (
+            <div
+              key={letra}
+              className={`letra ${estado || ""} ${
+                preguntas[current].letra === letra ? "actual" : ""
+              }`}
+              style={{
+                left: `calc(50% + ${x}px)`,
+                top: `calc(50% + ${y}px)`
+              }}
+            >
+              {letra}
             </div>
-          </div>
+          );
+        })}
+      </div>
 
-          <div className="panel-right">
-            <h3>Letra: {letras[indice]}</h3>
-            <p className="pregunta-text">{(preguntas[indice] && preguntas[indice].pregunta) || "..."}</p>
+      {/* PANEL DE PREGUNTA */}
+      <div className="panel-pregunta">
+        <h2>Letra: {preguntas[current].letra}</h2>
+        <p>{preguntas[current].pregunta}</p>
 
-            <input
-              value={respuesta}
-              onChange={(e) => setRespuesta(e.target.value)}
-              placeholder="Escribe tu respuesta o 'pasapalabra'"
-              onKeyDown={(e) => e.key === "Enter" && handleResponder()}
-            />
+        <input
+          type="text"
+          placeholder="Respuesta…"
+          value={respuesta}
+          onChange={(e) => setRespuesta(e.target.value)}
+        />
 
-            <div style={{ marginTop: 10 }}>
-              <button onClick={handleResponder}>Responder</button>
-              <button onClick={handlePasar} style={{ marginLeft: 8 }}>
-                Pasapalabra
-              </button>
-              <button onClick={() => setIndice((i) => (i + 1) % letras.length)} style={{ marginLeft: 8 }}>
-                Siguiente
-              </button>
-            </div>
-          </div>
+        <div className="botones">
+          <button className="btn-responder" onClick={handleResponder}>
+            Responder
+          </button>
+
+          <button className="btn-pasa" onClick={handlePasapalabra}>
+            Pasapalabra
+          </button>
         </div>
-      )}
+      </div>
+
+      {/* Audios */}
+      <audio ref={audioCorrecto} src="/sounds/correcto.mp3" />
+      <audio ref={audioIncorrecto} src="/sounds/incorrecto.mp3" />
+      <audio ref={audioPasapalabra} src="/sounds/pasapalabra.mp3" />
     </div>
   );
 }

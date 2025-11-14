@@ -1,11 +1,6 @@
-import Rosco from "./components/Rosco.jsx"
+import React from "react";
+import Rosco from "./components/Rosco";
 
-function App() {
-  return (
-    <div className="App">
-      <Rosco />
-    </div>
-  )
+export default function App() {
+  return <Rosco />;
 }
-
-export default App
