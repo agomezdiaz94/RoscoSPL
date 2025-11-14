@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import "../styles/Rosco.css";
 import preguntasData from "../data/preguntas.json";
 
-import logo from "../assets/logo.png";     // Logo derecha
-import logo2 from "../assets/logo2.png";   // Logo izquierda
+import logo from "../assets/logo.png";     
+import logo2 from "../assets/logo2.png";   
 
 const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
@@ -20,11 +20,36 @@ export default function Rosco() {
   const audioPasapalabra = useRef(null);
 
   useEffect(() => {
-    setPreguntas(preguntasData);
+    // Selecciona una pregunta aleatoria por letra al iniciar
+    const juego = preguntasData.map((item) => {
+      const random = Math.floor(Math.random() * item.preguntas.length);
+      return {
+        ...item,
+        pregunta: item.preguntas[random].pregunta,
+        respuesta: item.preguntas[random].respuesta.toLowerCase().trim(),
+      };
+    });
+    setPreguntas(juego);
   }, []);
 
+  const iniciarJuego = () => {
+    // Reinicia estados
+    const juego = preguntasData.map((item) => {
+      const random = Math.floor(Math.random() * item.preguntas.length);
+      return {
+        ...item,
+        pregunta: item.preguntas[random].pregunta,
+        respuesta: item.preguntas[random].respuesta.toLowerCase().trim(),
+      };
+    });
+    setPreguntas(juego);
+    setEstadoLetras({});
+    setCurrent(0);
+    setRespuesta("");
+  };
+
   const handleResponder = () => {
-    const correcta = preguntas[current].respuesta.toLowerCase().trim();
+    const correcta = preguntas[current].respuesta;
     const userRes = respuesta.toLowerCase().trim();
 
     let nuevoEstado = { ...estadoLetras };
@@ -54,21 +79,22 @@ export default function Rosco() {
     setRespuesta("");
 
     let next = current + 1;
+    const total = preguntas.length;
 
-    while (next < preguntas.length && estadoLetras[preguntas[next].letra]) {
+    // Buscar siguiente letra pendiente
+    let vueltas = 0;
+    while (vueltas < total) {
+      const letra = preguntas[next % total].letra;
+      if (!estadoLetras[letra] || estadoLetras[letra] === "pasapalabra") {
+        setCurrent(next % total);
+        return;
+      }
       next++;
+      vueltas++;
     }
 
-    if (next >= preguntas.length) next = preguntas.findIndex(
-      (p) => !estadoLetras[p.letra]
-    );
-
-    if (next === -1) {
-      alert("¡Juego terminado!");
-      return;
-    }
-
-    setCurrent(next);
+    // Si no hay letras pendientes
+    alert("¡Juego terminado!");
   };
 
   if (!preguntas.length) return <div>Cargando...</div>;
@@ -84,7 +110,12 @@ export default function Rosco() {
           onChange={(e) => setJugador(e.target.value)}
         />
         <button
-          onClick={() => jugador.trim() && setJugadorListo(true)}
+          onClick={() => {
+            if (jugador.trim()) {
+              setJugadorListo(true);
+              iniciarJuego();
+            }
+          }}
           className="btn-nombre"
         >
           Comenzar
@@ -95,8 +126,7 @@ export default function Rosco() {
 
   return (
     <div className="rosco-container">
-      
-      {/* LOGOS ARRIBA */}
+      {/* LOGOS */}
       <div className="logos-container">
         <img src={logo2} className="logo-izq" alt="Logo izquierdo" />
         <img src={logo} className="logo-der" alt="Logo derecho" />
@@ -121,7 +151,7 @@ export default function Rosco() {
               }`}
               style={{
                 left: `calc(50% + ${x}px)`,
-                top: `calc(50% + ${y}px)`
+                top: `calc(50% + ${y}px)`,
               }}
             >
               {letra}
