@@ -8,50 +8,18 @@
     ]
   },
   {
-    "letter": "E",
-    "questions": [
-      { "question": "Equipos de Protección Personal.", "answer": "epp" },
-      { "question": "Situación imprevista que requiere acción inmediata.", "answer": "emergencia" },
-      { "question": "Proceso de obtener mineral.", "answer": "extracción" }
-    ]
-  },
-  {
-    "letter": "I",
-    "questions": [
-      { "question": "Sistema de luz en faenas.", "answer": "iluminación" },
-      { "question": "Evento no deseado sin daño.", "answer": "incidente" },
-      { "question": "Revisión preventiva de equipos o áreas.", "answer": "inspección" }
-    ]
-  },
-  {
-    "letter": "O",
-    "questions": [
-      { "question": "Actividad productiva en la mina.", "answer": "operación" },
-      { "question": "Gas vital para respiración y control en espacios confinados.", "answer": "oxígeno" },
-      { "question": "Persona que maneja maquinaria.", "answer": "operador" }
-    ]
-  },
-  {
-    "letter": "U",
-    "questions": [
-      { "question": "Lugar exacto de un trabajador o equipo.", "answer": "ubicación" },
-      { "question": "Persona que usa equipos o herramientas.", "answer": "usuario" },
-      { "question": "Situación que requiere acción inmediata.", "answer": "urgencia" }
-    ]
-  },
-  {
     "letter": "B",
     "questions": [
       { "question": "Caja de primeros auxilios.", "answer": "botiquín" },
-      { "question": "Maquinaria pesada utilizada en minería.", "answer": "bulldozer" },
-      { "question": "Lugar donde se almacenan herramientas y productos.", "answer": "bodega" }
+      { "question": "Estructura que evita caídas en zonas elevadas.", "answer": "baranda" },
+      { "question": "Lugar donde se almacena herramientas y productos.", "answer": "bodega" }
     ]
   },
   {
     "letter": "C",
     "questions": [
       { "question": "EPP para proteger la cabeza.", "answer": "casco" },
-      { "question": "Vehículo de alto tonelaje.", "answer": "camión minero" },
+      { "question": "Camión de alto tonelaje.", "answer": "caex" },
       { "question": "Proceso de cargar material.", "answer": "carguío" }
     ]
   },
@@ -64,17 +32,25 @@
     ]
   },
   {
+    "letter": "E",
+    "questions": [
+      { "question": "Equipos de Protección Personal.", "answer": "epp" },
+      { "question": "Proceso de obtener mineral.", "answer": "extracción" },
+      { "question": "Situación imprevista que requiere una acción inmediata.", "answer": "emergencia" }
+    ]
+  },
+  {
     "letter": "F",
     "questions": [
       { "question": "Lugar donde se desarrolla el trabajo minero.", "answer": "faena" },
-      { "question": "Elemento para limpieza de aire o agua.", "answer": "filtro" },
+      { "question": "Elemento de limpieza (aire o agua).", "answer": "filtro" },
       { "question": "Capacitación de los trabajadores.", "answer": "formación" }
     ]
   },
   {
     "letter": "G",
     "questions": [
-      { "question": "Profesional que estudia el terreno.", "answer": "geólogo" },
+      { "question": "Ave marina sensible a la contaminación lumínica.", "answer": "golondrina de mar" },
       { "question": "Abertura en el suelo o roca.", "answer": "grieta" },
       { "question": "Persona responsable de control y seguridad.", "answer": "guardia" }
     ]
@@ -83,14 +59,22 @@
     "letter": "H",
     "questions": [
       { "question": "Condición que afecta estabilidad o maquinaria.", "answer": "humedad" },
-      { "question": "Documento con información de sustancias peligrosas.", "answer": "hoja de seguridad" },
+      { "question": "Documento con información de sustancias peligrosas.", "answer": "hds" },
       { "question": "Implemento de trabajo.", "answer": "herramienta" }
+    ]
+  },
+  {
+    "letter": "I",
+    "questions": [
+      { "question": "Sistema de luz en faenas.", "answer": "iluminación" },
+      { "question": "Evento no deseado sin daño.", "answer": "incidente" },
+      { "question": "Revisión preventiva de equipos o áreas.", "answer": "inspección" }
     ]
   },
   {
     "letter": "L",
     "questions": [
-      { "question": "Proceso de extracción con soluciones químicas.", "answer": "lixiviación" },
+      { "question": "Línea que marca el límite seguro para evitar caídas.", "answer": "línea de vida" },
       { "question": "Movimiento de cargas.", "answer": "levante" },
       { "question": "Persona que orienta al equipo en tareas seguras.", "answer": "líder" }
     ]
@@ -112,19 +96,27 @@
     ]
   },
   {
+    "letter": "O",
+    "questions": [
+      { "question": "Actividad productiva en la mina.", "answer": "operación" },
+      { "question": "Gas vital para respiración y control en espacios confinados.", "answer": "oxígeno" },
+      { "question": "Persona que maneja maquinaria.", "answer": "operador" }
+    ]
+  },
+  {
     "letter": "P",
     "questions": [
       { "question": "Proceso para abrir pozos en la roca.", "answer": "perforación" },
       { "question": "Protocolo ante incidentes.", "answer": "plan de emergencias" },
-      { "question": "Material fino suspendido, riesgo respiratorio.", "answer": "polvo" }
+      { "question": "Material fino suspendido, riesgo para respiración.", "answer": "polvo" }
     ]
   },
   {
     "letter": "Q",
     "questions": [
       { "question": "Formación natural del terreno que puede representar peligro.", "answer": "quebrada" },
-      { "question": "Sustancias utilizadas en procesos mineros que requieren manejo seguro.", "answer": "químicos" },
-      { "question": "Código utilizado para acceder rápidamente a información en faena.", "answer": "qr" }
+      { "question": "Sustancias usadas en minería que requieren manejo seguro.", "answer": "químicos" },
+      { "question": "Código para acceder rápidamente a información.", "answer": "qr" }
     ]
   },
   {
@@ -138,17 +130,25 @@
   {
     "letter": "S",
     "questions": [
-      { "question": "Conjunto de medidas para evitar accidentes.", "answer": "seguridad" },
-      { "question": "Encargado de dirigir tareas.", "answer": "supervisor" },
+      { "question": "Mineral blanco que se extrae en faena.", "answer": "sal" },
+      { "question": "Encargado de dirigir y verificar tareas.", "answer": "supervisor" },
       { "question": "Práctica de emergencia.", "answer": "simulacro" }
     ]
   },
   {
     "letter": "T",
     "questions": [
-      { "question": "Máquina para perforar.", "answer": "taladro" },
-      { "question": "Persona responsable de ejecutar tareas seguras.", "answer": "trabajador" },
+      { "question": "Máquina o herramienta para perforar.", "answer": "taladro" },
+      { "question": "Persona que ejecuta tareas en el trabajo.", "answer": "trabajador" },
       { "question": "Jornada laboral.", "answer": "turno" }
+    ]
+  },
+  {
+    "letter": "U",
+    "questions": [
+      { "question": "Lugar exacto de un trabajador o equipo.", "answer": "ubicación" },
+      { "question": "Persona que usa equipos o herramientas.", "answer": "usuario" },
+      { "question": "Situación que requiere acción inmediata.", "answer": "urgencia" }
     ]
   },
   {
@@ -162,25 +162,33 @@
   {
     "letter": "W",
     "questions": [
-      { "question": "Elemento usado en redes o software.", "answer": "wifi" },
+      { "question": "Elemento utilizado en redes o software.", "answer": "wifi" },
       { "question": "Nombre de un bodeguero de SPL Patillos.", "answer": "willy" },
       { "question": "Canción del grupo Queen.", "answer": "we are the champions" }
     ]
   },
   {
+    "letter": "X",
+    "questions": [
+      { "question": "Técnica usada para ver el interior del cuerpo.", "answer": "rayos x" },
+      { "question": "Material que sirve para hacer una explosión.", "answer": "explosivo" },
+      { "question": "Letra del abecedario que viene después de la W.", "answer": "x" }
+    ]
+  },
+  {
     "letter": "Y",
     "questions": [
-      { "question": "Sitio donde se concentra un mineral.", "answer": "yacimiento" },
-      { "question": "Elemento químico presente en minería no metálica.", "answer": "yodo" },
+      { "question": "Mineral blanco utilizado en construcción para enyesar.", "answer": "yeso" },
+      { "question": "Elemento químico producido en minería no metálica.", "answer": "yodo" },
       { "question": "Encargada de bodega de SPL.", "answer": "yareslla" }
     ]
   },
   {
     "letter": "Z",
     "questions": [
-      { "question": "Área donde se debe utilizar protección especial.", "answer": "zona" },
-      { "question": "Área donde no hay peligro inmediato.", "answer": "zona segura" },
-      { "question": "Animal que se pasea por mina o puerto.", "answer": "zorro" }
+      { "question": "Abertura en el suelo que debe señalizarse para evitar caídas.", "answer": "zanja" },
+      { "question": "Lugar donde las personas pueden permanecer seguras.", "answer": "zona segura" },
+      { "question": "Animal que a veces aparece en mina y puerto.", "answer": "zorro" }
     ]
   }
 ]
